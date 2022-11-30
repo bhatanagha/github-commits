@@ -13,6 +13,15 @@
   }
 }
 
+li.commit-list {
+  text-align: initial; 
+}
+
+div.commit-div {
+  overflow: auto;
+  height: 350px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
