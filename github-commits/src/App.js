@@ -7,19 +7,19 @@ import Commits from './components/commits';
 
 function App() {
 
-  // const [token, setToken] = useState(null)
+  const [token, setToken] = useState(null)
 
-  // const getToken = (token) => {
-  //   setToken(to)
-  // }
+  const getToken = (validToken) => {
+    setToken(validToken)
+  }
 
   return (
       <Router>
     <div className="App">
       <header className="App-header">
      <Routes>
-          <Route path="/commits" element={<Commits />} />
-          <Route path="/" element={<Form />} />
+          <Route path="/commits" element={<Commits token={token}/>} />
+          <Route path="/" element={<Form getToken={getToken} />} />
         </Routes>
       </header>
     </div>
