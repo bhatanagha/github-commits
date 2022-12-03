@@ -12,16 +12,17 @@ function Form(props) {
     const submitViaState = (e) => {
         e.preventDefault()
         setToken(e.target.token.value)
-        if (token === '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') {
+        if (token === process.env.REACT_APP_AUTHENTICATION_TOKEN) {
             props.getToken(token)
-            if ('caches' in window) {
-                const data = new Response(JSON.stringify(token));
+            // if ('caches' in window) {
+            //     const data = new Response(JSON.stringify(token));
               
-                // Opening given cache and putting our data into it
-                caches.open('token').then((cache) => {
-                  cache.put('/', data);
-                });
-              }
+            //     // Opening given cache and putting our data into it
+            //     caches.open('token').then((cache) => {
+            //       cache.put('/', data);
+            //     });
+            //   }
+            localStorage.setItem('token', token);
             navigateToCommits()
         }
     }
@@ -29,10 +30,10 @@ function Form(props) {
     const [cachedToken, setCachedToken] = useState()
     useEffect(() => {
       const getCacheData = async () => {
-        const cacheStorage = await caches.open('token');
-        const cachedResponse = await cacheStorage.match('/');
-        const t = await cachedResponse.json()
-        setCachedToken(t)
+        // const cacheStorage = await caches.open('token');
+        // const cachedResponse = await cacheStorage.match('/');
+        // const t = await cachedResponse.json()
+        setCachedToken(localStorage.getItem('token'))
       }
       getCacheData()
     }, [cachedToken])
@@ -42,7 +43,7 @@ function Form(props) {
             <form onSubmit={submitViaState}>
        Enter Access Token Key:
         <input type="text" name="token" defaultValue={cachedToken} onChange={(e) => setToken(e.target.value)}></input>
-        <button>Submit</button>
+        <button type="submit">Submit</button>
         </form>
         </div>
     );
