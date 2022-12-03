@@ -2,6 +2,7 @@
 // import fetch from 'node-fetch';
 import { useEffect, useState } from 'react';
 import { VscRefresh } from "react-icons/vsc"
+import Timer from './timer'
 
 function Commits(props) {
   const user = 'bhatanagha';
@@ -11,6 +12,7 @@ function Commits(props) {
   const [error, setError] = useState(false)
   const [message, setMessage] = useState(null)
   const [refresh, setRefresh] = useState(false)
+  const [timer, setTimer] = useState(1)
 
   const fetchCommits = () => {
     fetch(`https://api.github.com/repos/${user}/${repo}/commits`, {
@@ -21,6 +23,15 @@ function Commits(props) {
       .then(() => setLoading(false))
       .catch(setError) // error
   }
+
+  setTimeout(() => {
+    setTimer(timer + 1)
+    if (timer === 30) {
+      console.log('now')
+      setTimer(1)
+      setRefresh(true)
+    }
+  }, 1000)
 
   useEffect(() => {
     setLoading(true) // loading
@@ -50,7 +61,9 @@ function Commits(props) {
 
   if (message) {
     return (
-      <><h2>Commit History <VscRefresh onClick={() => { setRefresh(true); } } /> </h2><div style={{"height": "450px"}} className='overflow-auto'>
+      <><h2>Commit History <VscRefresh onClick={() => { setRefresh(true); } } /> </h2>
+          <Timer secs={31 - timer}></Timer>
+      <div style={{"height": "450px"}} className='overflow-auto'>
         <ol className="list-group">
           {message.map(commit => <li key={commit.sha} className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto align-items-start fs-5">

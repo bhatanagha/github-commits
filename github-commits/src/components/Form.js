@@ -14,6 +14,7 @@ function Form(props) {
         setToken(e.target.token.value)
         if (token === process.env.REACT_APP_AUTHENTICATION_TOKEN) {
             props.getToken(token)
+            // commenting this out as caching doens't seem to work on 'surge' when deployed. Have used localstorage.
             // if ('caches' in window) {
             //     const data = new Response(JSON.stringify(token));
               
@@ -39,13 +40,17 @@ function Form(props) {
     }, [cachedToken])
 
     return (
-        <div className="Header">
-            <form onSubmit={submitViaState}>
-       Enter Access Token Key:
-        <input type="text" name="token" defaultValue={cachedToken} onChange={(e) => setToken(e.target.value)}></input>
-        <button type="submit">Submit</button>
+      <div className="Header">
+
+        <form onSubmit={submitViaState}>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Enter Access Token Key</label>
+            <input type="text" class="form-control" name="token" defaultValue={cachedToken} onChange={(e) => setToken(e.target.value)}></input>
+            <button type="submit">Submit</button>
+          </div>
         </form>
-        </div>
+
+      </div>
     );
 }
 
