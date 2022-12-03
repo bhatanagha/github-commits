@@ -36,6 +36,7 @@ function Commits(props) {
   useEffect(() => {
     setLoading(true) // loading
     fetchCommits()
+    setTimer(1)
     setRefresh(false)
   }, [refresh])
 

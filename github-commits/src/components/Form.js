@@ -11,19 +11,11 @@ function Form(props) {
     const [token, setToken] = useState('')
     const submitViaState = (e) => {
         e.preventDefault()
-        setToken(e.target.token.value)
-        if (token === process.env.REACT_APP_AUTHENTICATION_TOKEN) {
+        console.log(process.env.REACT_APP_AUTHENTICATION_TOKEN)
+        if (e.target.token.value === process.env.REACT_APP_AUTHENTICATION_TOKEN) {
+          setToken(e.target.token.value)
             props.getToken(token)
-            // commenting this out as caching doens't seem to work on 'surge' when deployed. Have used localstorage.
-            // if ('caches' in window) {
-            //     const data = new Response(JSON.stringify(token));
-              
-            //     // Opening given cache and putting our data into it
-            //     caches.open('token').then((cache) => {
-            //       cache.put('/', data);
-            //     });
-            //   }
-            localStorage.setItem('token', token);
+            localStorage.setItem('token', e.target.token.value);
             navigateToCommits()
         }
     }
@@ -31,10 +23,11 @@ function Form(props) {
     const [cachedToken, setCachedToken] = useState()
     useEffect(() => {
       const getCacheData = async () => {
-        // const cacheStorage = await caches.open('token');
-        // const cachedResponse = await cacheStorage.match('/');
-        // const t = await cachedResponse.json()
-        setCachedToken(localStorage.getItem('token'))
+        const storedToken = localStorage.getItem('token')
+        if (storedToken) {
+          setCachedToken(storedToken)
+          setToken(storedToken)
+        }
       }
       getCacheData()
     }, [cachedToken])
@@ -43,13 +36,12 @@ function Form(props) {
       <div className="Header">
 
         <form onSubmit={submitViaState}>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Enter Access Token Key</label>
-            <input type="text" class="form-control" name="token" defaultValue={cachedToken} onChange={(e) => setToken(e.target.value)}></input>
+          <div className="mb-3">
+            <label className="form-label">Enter Access Token Key</label>
+            <input type="text" className="form-control" name="token" defaultValue={cachedToken}></input>
             <button type="submit">Submit</button>
           </div>
         </form>
-
       </div>
     );
 }
