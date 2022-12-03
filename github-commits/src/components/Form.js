@@ -1,7 +1,6 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../App.css';
-import {Routes, Route, useNavigate, Navigate} from 'react-router-dom';
-import Commits from './commits';
+import {useNavigate, Navigate} from 'react-router-dom';
 
 function Form(props) {
     const navigate = useNavigate();
@@ -11,12 +10,14 @@ function Form(props) {
     const [token, setToken] = useState('')
     const submitViaState = (e) => {
         e.preventDefault()
-        console.log(process.env.REACT_APP_AUTHENTICATION_TOKEN)
         if (e.target.token.value === process.env.REACT_APP_AUTHENTICATION_TOKEN) {
           setToken(e.target.token.value)
             props.getToken(token)
             localStorage.setItem('token', e.target.token.value);
             navigateToCommits()
+        } else {
+          const validationMsg = e.target.querySelector('div[name="validation"]')
+          validationMsg.classList.remove('d-none')
         }
     }
 
@@ -34,11 +35,12 @@ function Form(props) {
 
     return (
       <div className="Header">
-
+        Fetch Github Commits
         <form onSubmit={submitViaState}>
           <div className="mb-3">
             <label className="form-label">Enter Access Token Key</label>
-            <input type="text" className="form-control" name="token" defaultValue={cachedToken}></input>
+            <input type="text" className="form-control mb-3" name="token" defaultValue={cachedToken}></input>
+            <div name="validation" id="validation-message" class="form-text d-none">Sorry, this is the wrong key</div>
             <button type="submit">Submit</button>
           </div>
         </form>

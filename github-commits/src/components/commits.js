@@ -1,5 +1,3 @@
-// const fetch = require('node-fetch');
-// import fetch from 'node-fetch';
 import { useEffect, useState } from 'react';
 import { VscRefresh } from "react-icons/vsc"
 import Timer from './timer'
