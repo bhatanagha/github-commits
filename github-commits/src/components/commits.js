@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { VscRefresh } from "react-icons/vsc"
 import Timer from './timer'
+import { Link } from 'react-router-dom';
 
 function Commits(props) {
   const user = 'bhatanagha';
@@ -11,6 +12,7 @@ function Commits(props) {
   const [message, setMessage] = useState(null)
   const [refresh, setRefresh] = useState(false)
   const [timer, setTimer] = useState(1)
+  const [loginError, setLoginError] = useState(false)
 
   const fetchCommits = () => {
     fetch(`https://api.github.com/repos/${user}/${repo}/commits`, {
@@ -33,9 +35,14 @@ function Commits(props) {
 
   useEffect(() => {
     setLoading(true) // loading
-    fetchCommits()
-    setTimer(1)
-    setRefresh(false)
+    if (localStorage.getItem('token')) {
+      fetchCommits()
+      setTimer(1)
+      setRefresh(false)
+    } else {
+      setLoading(false) 
+      setLoginError(true)
+    }
   }, [refresh])
 
   if (loading) {
@@ -46,6 +53,12 @@ function Commits(props) {
   if (error) {
     return (
       <pre>{JSON.stringify(error)}</pre>
+    )
+  }
+
+  if (loginError) {
+    return (
+      <Link to="/">Navigate via this link to enter the password</Link>
     )
   }
 
