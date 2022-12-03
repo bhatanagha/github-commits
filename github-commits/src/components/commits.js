@@ -50,17 +50,16 @@ function Commits(props) {
 
   if (message) {
     return (
-      <div> <h2>Commit History <VscRefresh onClick={() => {setRefresh(true)}}/> </h2>
+      <><h2>Commit History <VscRefresh onClick={() => { setRefresh(true); } } /> </h2><div style={{"height": "450px"}} className='overflow-auto'>
         <ol className="list-group">
-          {message.map(commit =>
-            <li key={commit.sha} className="list-group-item d-flex justify-content-between align-items-start">
-              <div className="ms-2 me-auto align-items-start fs-5">
-                <><p className="fw-bold text-start">{commit.commit.message}</p><p>{getDate(commit.commit.author.date)} <span className='fw-bold'>by {commit.commit.author.name}</span></p></>
-              </div>
-            </li>
+          {message.map(commit => <li key={commit.sha} className="list-group-item d-flex justify-content-between align-items-start">
+            <div className="ms-2 me-auto align-items-start fs-5">
+              <><p className="fw-bold text-start">{commit.commit.message}</p><p>{getDate(commit.commit.author.date)} <span className='fw-bold'>by {commit.author.login}</span></p></>
+            </div>
+          </li>
           )}
         </ol>
-      </div>
+      </div></>
     )
   }
 }
